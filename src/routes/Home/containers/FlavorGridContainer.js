@@ -26,10 +26,10 @@ class FlavorGridContainer extends React.Component {
     this.moveFlavor = this.moveFlavor.bind(this)
   }
 
-  moveFlavor (dragIndex, hoverIndex) {
+  moveFlavor (startIndex, endIndex) {
     let reorderVal = {
-      dragIndex: parseInt(dragIndex),
-      hoverIndex: parseInt(hoverIndex)
+      startIndex: parseInt(startIndex),
+      endIndex: parseInt(endIndex)
     }
     this.props.rankingsReorderItems(reorderVal)
   }

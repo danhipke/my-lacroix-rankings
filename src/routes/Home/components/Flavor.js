@@ -1,16 +1,8 @@
-import React, { PropTypes, Component } from 'react'
+import React, { PropTypes } from 'react'
 import { DragSource, DropTarget } from 'react-dnd'
-import ItemTypes from '../modules/itemTypes'
 import flow from 'lodash.flow'
-import './FlavorGrid.scss'
-
-const style = {
-  border: '1px dashed gray',
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
-  backgroundColor: 'white',
-  cursor: 'move'
-}
+import ItemTypes from '../modules/itemTypes'
+import './Flavor.scss'
 
 const flavorSource = {
   beginDrag (props) {
@@ -21,9 +13,18 @@ const flavorSource = {
   }
 }
 
-/**
- * Specifies the props to inject into your component.
- */
+const flavorTarget = {
+  hover (props, monitor, component) {
+    const dragIndex = monitor.getItem().index
+    const hoverIndex = props.index
+
+    if (dragIndex === hoverIndex) return
+
+    props.moveFlavor(dragIndex, hoverIndex)
+    monitor.getItem().index = hoverIndex
+  }
+}
+
 function collectDrag (connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
@@ -37,54 +38,32 @@ function collectDrop (connect, monitor) {
   }
 }
 
-const flavorTarget = {
-  hover (props, monitor, component) {
-    const dragIndex = monitor.getItem().index
-    const hoverIndex = props.index
-
-    // Don't replace items with themselves
-    if (dragIndex === hoverIndex) {
-      return
-    }
-
-    // Time to actually perform the action
-    props.moveFlavor(dragIndex, hoverIndex)
-
-    // Note: we're mutating the monitor item here!
-    // Generally it's better to avoid mutations,
-    // but it's good here for the sake of performance
-    // to avoid expensive index searches.
-    monitor.getItem().index = hoverIndex
-  }
+export const Flavor = (props) => {
+  const { isDragging, connectDragSource, connectDropTarget, imageSrc, flavor, index } = props
+  const opacity = isDragging ? 0 : 1
+  return connectDragSource(connectDropTarget(
+    <div
+      style={{ opacity }}
+      className='flavor' >
+      <img
+        src={imageSrc}
+        alt={flavor}
+        style={{ width: '100%' }}
+        className='flavor-image' />
+      <span className='flavor-rank'>{index + 1}</span>
+    </div>
+   ))
 }
 
-class Flavor extends Component {
-  static propTypes = {
-    connectDragSource: PropTypes.func.isRequired,
-    connectDropTarget: PropTypes.func.isRequired,
-    index: PropTypes.number.isRequired,
-    isDragging: PropTypes.bool.isRequired,
-    imageSrc: PropTypes.string.isRequired,
-    id: PropTypes.any.isRequired,
-    flavor: PropTypes.string.isRequired,
-    moveFlavor: PropTypes.func.isRequired
-  }
-
-  render () {
-    const { isDragging, connectDragSource, connectDropTarget, imageSrc, flavor, index } = this.props
-    const opacity = isDragging ? 0 : 1
-    return connectDragSource(connectDropTarget(
-      <div
-        style={{ ...style, opacity }}
-        className='flavor' >
-        <img
-          src={imageSrc}
-          alt={flavor}
-          className='flavor-image' />
-        <span className='flavor-ranking'>{index + 1}</span>
-      </div>
-   ))
-  }
+Flavor.propTypes = {
+  connectDragSource: PropTypes.func.isRequired,
+  connectDropTarget: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  imageSrc: PropTypes.string.isRequired,
+  id: PropTypes.any.isRequired,
+  flavor: PropTypes.string.isRequired,
+  moveFlavor: PropTypes.func.isRequired
 }
 
 export default flow(
