@@ -23,31 +23,31 @@ export const actions = {
 const ACTION_HANDLERS = {
   [RANKINGS_REORDER_ITEM]: (state, action) => {
     const reorder = action.payload
-    const reorderItem = state.dashboardItems[reorder.start]
-    let newDashboardItems = []
-    state.dashboardItems.map((item, i) => {
-      if (i === reorder.start) {
+    const reorderItem = state.rankings[reorder.dragIndex]
+    let newRankings = []
+    state.rankings.map((item, i) => {
+      if (i === reorder.dragIndex) {
         return
       }
 
       // we need the if statement because the behaviour
       // is determined if someone someone is dragging an
       // item from higher to lower place on the list or vice versa
-      if (reorder.end < reorder.start) {
-        if (i === reorder.end) {
-          newDashboardItems.push(reorderItem)
+      if (reorder.hoverIndex < reorder.dragIndex) {
+        if (i === reorder.hoverIndex) {
+          newRankings.push(reorderItem)
         }
-        newDashboardItems.push(item)
+        newRankings.push(item)
       } else {
-        newDashboardItems.push(item)
-        if (i === reorder.end) {
-          newDashboardItems.push(reorderItem)
+        newRankings.push(item)
+        if (i === reorder.hoverIndex) {
+          newRankings.push(reorderItem)
         }
       }
     })
 
     return Object.assign({}, state, {
-      dashboardItems: newDashboardItems
+      rankings: newRankings
     })
   }
 }

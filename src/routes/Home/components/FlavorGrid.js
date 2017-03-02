@@ -1,26 +1,29 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
+import Flavor from './Flavor'
 import './FlavorGrid.scss'
 
 export const FlavorGrid = (props) => {
   const imageGrid = props.rankings.rankings.map((ranking, i) => {
-    return <img
-      key={i}
-      id={i}
-      alt={ranking.flavor}
-      className='lacroix-flavor'
-      src={ranking.imageSrc} />
+    return (
+      <Flavor
+        key={i}
+        index={i}
+        imageSrc={ranking.imageSrc}
+        flavor={ranking.flavor}
+        moveFlavor={props.moveFlavor} />
+    )
   })
 
   return (
-    <div className='flavor-grid' >
+    <div>
       {imageGrid}
     </div>
   )
 }
 
 FlavorGrid.propTypes = {
-  rankings     : React.PropTypes.object.isRequired,
-  rankingsReorderItems : React.PropTypes.func.isRequired
+  rankings: PropTypes.object.isRequired,
+  moveFlavor: PropTypes.func.isRequired
 }
 
 export default FlavorGrid

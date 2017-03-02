@@ -1,10 +1,25 @@
-.flavor-grid {
-
-}
-
-.lacroix-flavor {
+.flavor {
+  position: relative;
   display: inline-block;
   width: 120px;
   margin: 1.5rem auto;
-  cursor: 'pointer';
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.flavor-image {
+  width: 100%;
+}
+
+.flavor-ranking {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding-right: 5px;
+  padding-left: 5px;
+  text-align: center;
+  background-color: green;
+  font-weight: bold;
+  color: white;
+  z-index: 100;
 }
