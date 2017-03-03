@@ -1,10 +1,13 @@
 const express = require('express')
 const debug = require('debug')('app:server')
 const path = require('path')
+const bodyParser = require('body-parser')
 const webpack = require('webpack')
 const webpackConfig = require('../config/webpack.config')
 const project = require('../config/project.config')
 const compress = require('compression')
+
+const index = require('./routes/index')
 
 const app = express()
 
@@ -36,6 +39,13 @@ if (project.env === 'development') {
   // of development since this directory will be copied into ~/dist
   // when the application is compiled.
   app.use(express.static(project.paths.public()))
+
+  // Make sure it can parse JSON POST requests
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
+
+  // Make the app serve our serverside /api routes
+  app.use('/', index)
 
   // This rewrites all routes requests to the root /index.html file
   // (ignoring file requests). If you want to implement universal
