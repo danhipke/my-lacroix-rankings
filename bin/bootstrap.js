@@ -8,6 +8,7 @@ const pgp = require('pg-promise')(options)
 const connectionString = 'postgres://localhost:5432/my_lacroix_rankings_app'
 const db = pgp(connectionString)
 
+// TODO: Initialize database with flavors table with flavor info
 db.tx(t => {
   let queries = [
     // Clear out preexisting tables

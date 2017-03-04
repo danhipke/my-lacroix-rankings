@@ -1,4 +1,3 @@
-const debug = require('debug')('app:queries')
 const options = {
   // Initialization Options
 }
@@ -29,7 +28,7 @@ const insertRankings = (req, res, next) => {
   let rankings = req.body.rankings.map((ranking) => (
     {
       user_id: userId,
-      flavor_id: ranking.flavor,
+      flavor_id: ranking.id,
       rank: ranking.rank
     })
   )
@@ -54,7 +53,7 @@ const updateRankings = (req, res, next) => {
   let rankings = req.body.rankings.map((ranking) => (
     {
       user_id: userId,
-      flavor_id: ranking.flavor,
+      flavor_id: ranking.id,
       rank: ranking.rank
     })
   )
@@ -76,12 +75,12 @@ const updateRankings = (req, res, next) => {
 
 const getRankings = (req, res, next) => {
   const userId = parseInt(req.params.userId)
-  db.any('SELECT * FROM rankings WHERE user_id = $1', userId)
+  db.many('SELECT * FROM rankings WHERE user_id = $1', userId)
     .then((data) => {
       res.status(200)
         .json({
           status: 'success',
-          data: data,
+          rankings: data,
           message: 'Retrieved all puppies for user Id ' + userId
         })
     })
