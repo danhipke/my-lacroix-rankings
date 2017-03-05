@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { rankingsReorderItems, setUserId } from '../modules/rankings'
-import { submitRankingData, getRankingData } from '../../../services/rankingsService'
+import { reorderFlavor } from '../modules/rankings'
+import { setUserId } from '../modules/user'
+import { submitRankings, getRankings } from '../../../services/rankingsService'
+import { createUser } from '../../../services/userService'
 import { DragDropContext } from 'react-dnd'
 import flow from 'lodash.flow'
 import HTML5Backend from 'react-dnd-html5-backend'
@@ -9,27 +11,29 @@ import Flavor from '../components/Flavor'
 import Fingerprint2 from 'fingerprintjs2'
 
 const mapDispatchToProps = {
-  rankingsReorderItems,
-  submitRankingData,
-  getRankingData,
-  setUserId
+  reorderFlavor,
+  submitRankings,
+  getRankings,
+  setUserId,
+  createUser
 }
 
 const mapStateToProps = (state) => ({
-  rankings : state.rankings.rankings,
-  userId: state.rankings.userId,
+  flavors : state.rankings.flavors,
+  userId: state.user.userId,
   hasRankedBefore: state.rankings.hasRankedBefore
 })
 
 class FlavorGridContainer extends React.Component {
   static propTypes = {
-    rankings: PropTypes.array.isRequired,
+    flavors: PropTypes.array.isRequired,
     userId: PropTypes.string,
     hasRankedBefore: PropTypes.bool.isRequired,
-    rankingsReorderItems: PropTypes.func.isRequired,
-    submitRankingData: PropTypes.func.isRequired,
-    getRankingData: PropTypes.func.isRequired,
-    setUserId: PropTypes.func.isRequired
+    reorderFlavor: PropTypes.func.isRequired,
+    submitRankings: PropTypes.func.isRequired,
+    getRankings: PropTypes.func.isRequired,
+    setUserId: PropTypes.func.isRequired,
+    createUser: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -40,7 +44,7 @@ class FlavorGridContainer extends React.Component {
 
     new Fingerprint2().get((result, components) => {
       this.props.setUserId(result)
-      this.props.getRankingData(this.props.userId)
+      this.props.getRankings(this.props.userId)
     })
   }
 
@@ -49,30 +53,35 @@ class FlavorGridContainer extends React.Component {
       startIndex: parseInt(startIndex),
       endIndex: parseInt(endIndex)
     }
-    this.props.rankingsReorderItems(reorderVal)
+    this.props.reorderFlavor(reorderVal)
   }
 
   submitFlavorRankings () {
+    if (!this.props.hasRankedBefore) {
+      this.props.createUser(this.props.userId)
+    }
+
     let submitData = {
       userId: this.props.userId,
       hasRankedBefore: this.props.hasRankedBefore,
-      rankings: this.props.rankings
+      flavors: this.props.flavors
     }
-    this.props.submitRankingData(submitData)
+    this.props.submitRankings(submitData)
   }
 
+  // TODO: Move button rendering and Flavor creation into separate component
   render () {
     return (
       <div>
         <div>
-          {this.props.rankings.map((ranking, i) => {
+          {this.props.flavors.map((flavor, i) => {
             return (
               <Flavor
-                key={ranking.id}
+                key={flavor.id}
                 index={i}
-                id={ranking.id}
-                imageSrc={ranking.imageSrc}
-                flavor={ranking.flavor}
+                id={flavor.id}
+                imageSrc={flavor.imageSrc}
+                flavor={flavor.name}
                 moveFlavor={this.moveFlavor} />
             )
           })}

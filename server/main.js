@@ -14,6 +14,13 @@ const app = express()
 // Apply gzip compression
 app.use(compress())
 
+// Make sure it can parse JSON POST requests
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// Make the app serve our serverside /api routes
+app.use('/', routes)
+
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
@@ -40,12 +47,15 @@ if (project.env === 'development') {
   // when the application is compiled.
   app.use(express.static(project.paths.public()))
 
-  // Make sure it can parse JSON POST requests
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: true }))
-
-  // Make the app serve our serverside /api routes
-  app.use('/', routes)
+  // Development error handler to print stack trace
+  app.use(function (err, req, res, next) {
+    res.status(err.code || 500)
+    .json({
+      status: 'error',
+      message: err
+    })
+    debug(err)
+  })
 
   // This rewrites all routes requests to the root /index.html file
   // (ignoring file requests). If you want to implement universal
@@ -62,6 +72,15 @@ if (project.env === 'development') {
     })
   })
 } else {
+  // Production error handler which does not print stack trace
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500)
+    .json({
+      status: 'error',
+      message: err.message
+    })
+  })
+
   debug(
     'Server is being run outside of live development mode, meaning it will ' +
     'only serve the compiled application bundle in ~/dist. Generally you ' +

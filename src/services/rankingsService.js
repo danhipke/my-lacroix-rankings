@@ -1,108 +1,97 @@
 import request from 'superagent'
 
-export const SUBMIT_RANKING_DATA = 'SUBMIT_RANKING_DATA'
-export const SUBMIT_RANKING_DATA_FAILURE = 'SUBMIT_RANKING_DATA_FAILURE'
-export const SUBMIT_RANKING_DATA_SUCCESS = 'SUBMIT_RANKING_DATA_SUCCESS'
-export const GET_RANKING_DATA = 'GET_RANKING_DATA'
-export const GET_RANKING_DATA_FAILURE = 'GET_RANKING_DATA_FAILURE'
-export const GET_RANKING_DATA_SUCCESS = 'GET_RANKING_DATA_SUCCESS'
+export const SUBMIT_RANKINGS = 'SUBMIT_RANKINGS'
+export const SUBMIT_RANKINGS_ERROR = 'SUBMIT_RANKINGS_ERROR'
+export const SUBMIT_RANKINGS_SUCCESS = 'SUBMIT_RANKINGS_SUCCESS'
+export const GET_RANKINGS = 'GET_RANKINGS'
+export const GET_RANKINGS_ERROR = 'GET_RANKINGS_ERROR'
+export const GET_RANKINGS_SUCCESS = 'GET_RANKINGS_SUCCESS'
+export const GET_RANKINGS_DOESNT_EXIST = 'GET_RANKINGS_DOESNT_EXIST'
 
-export function submitRankingData (value) {
+export function submitRankings (value) {
   return {
-    type: SUBMIT_RANKING_DATA,
+    type: SUBMIT_RANKINGS,
     payload: value
   }
 }
 
-export function getRankingData (value) {
+export function getRankings (value) {
   return {
-    type: GET_RANKING_DATA,
+    type: GET_RANKINGS,
     payload: value
   }
 }
 
-// TODO: figure out if some of this should be moved to rankings module
 const rankingsService = store => next => action => {
   next(action)
   switch (action.type) {
-    case SUBMIT_RANKING_DATA: {
-      const rankings = action.payload.rankings
+    case SUBMIT_RANKINGS: {
+      const flavors = action.payload.flavors
       const userId = action.payload.userId
       const hasRankedBefore = action.payload.hasRankedBefore
-      let rankingsPostData = rankings.map((ranking) => (
+      let flavorsPostData = flavors.map((flavor) => (
         {
-          id: ranking.id,
-          rank: ranking.rank
+          id: flavor.id,
+          rank: flavor.rank
         })
       )
       if (!hasRankedBefore) {
-        request.post(`/api/users`)
-        .set('Content-Type', 'application/json')
-        .send({ id: userId })
-        .end((err, res) => {
-          if (err) {
-            return next({
-              type: SUBMIT_RANKING_DATA_FAILURE,
-              payload: err
-            })
-          }
-          const data = JSON.parse(res.text)
-          next({
-            type: SUBMIT_RANKING_DATA_SUCCESS,
-            payload: data
-          })
-        })
         request.post('/api/rankings')
         .set('Content-Type', 'application/json')
-        .send({ userId: userId, rankings: rankingsPostData })
+        .send({ userId: userId, flavors: flavorsPostData })
         .end((err, res) => {
           if (err) {
             return next({
-              type: SUBMIT_RANKING_DATA_FAILURE,
+              type: SUBMIT_RANKINGS_ERROR,
               payload: err
             })
           }
           const data = JSON.parse(res.text)
           next({
-            type: SUBMIT_RANKING_DATA_SUCCESS,
+            type: SUBMIT_RANKINGS_SUCCESS,
             payload: data
           })
         })
       } else {
         request.put('/api/rankings')
         .set('Content-Type', 'application/json')
-        .send({ userId: userId, rankings: rankingsPostData })
+        .send({ userId: userId, flavors: flavorsPostData })
         .end((err, res) => {
           if (err) {
             return next({
-              type: SUBMIT_RANKING_DATA_FAILURE,
+              type: SUBMIT_RANKINGS_ERROR,
               payload: err
             })
           }
           const data = JSON.parse(res.text)
           next({
-            type: SUBMIT_RANKING_DATA_SUCCESS,
+            type: SUBMIT_RANKINGS_SUCCESS,
             payload: data
           })
         })
       }
       break
     }
-    case GET_RANKING_DATA: {
+    case GET_RANKINGS: {
       const userId = action.payload
       request.get(`/api/rankings/${userId}`)
       .end((err, res) => {
-        if (err) {
+        if (res.notFound) {
           return next({
-            type: GET_RANKING_DATA_FAILURE,
+            type: GET_RANKINGS_DOESNT_EXIST
+          })
+        } else if (err) {
+          return next({
+            type: GET_RANKINGS_ERROR,
             payload: err
           })
+        } else {
+          const data = JSON.parse(res.text)
+          next({
+            type: GET_RANKINGS_SUCCESS,
+            payload: data
+          })
         }
-        const data = JSON.parse(res.text)
-        next({
-          type: GET_RANKING_DATA_SUCCESS,
-          payload: data
-        })
       })
       break
     }

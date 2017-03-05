@@ -10,10 +10,12 @@ export default (store) => ({
       /*  Webpack - use require callback to define
           dependencies for bundling   */
       const HomeView = require('./components/HomeView').default
-      const reducer = require('./modules/rankings').default
+      const rankingsReducer = require('./modules/rankings').default
+      const userReducer = require('./modules/user').default
 
-      /*  Add the reducer to the store on key 'rankings'  */
-      injectReducer(store, { key: 'rankings', reducer })
+      /*  Add the reducers  */
+      injectReducer(store, { key: 'rankings', reducer: rankingsReducer })
+      injectReducer(store, { key: 'user', reducer: userReducer })
 
       /*  Return getComponent   */
       cb(null, HomeView)

@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react'
 import { DragSource, DropTarget } from 'react-dnd'
 import flow from 'lodash.flow'
-import ItemTypes from '../modules/itemTypes'
 import './Flavor.scss'
+
+export const FLAVOR_ITEM_TYPE = 'FLAVOR_ITEM_TYPE'
 
 const flavorSource = {
   beginDrag (props) {
@@ -67,6 +68,6 @@ Flavor.propTypes = {
 }
 
 export default flow(
- DragSource(ItemTypes.FLAVOR, flavorSource, collectDrag),
- DropTarget(ItemTypes.FLAVOR, flavorTarget, collectDrop)
+ DragSource(FLAVOR_ITEM_TYPE, flavorSource, collectDrag),
+ DropTarget(FLAVOR_ITEM_TYPE, flavorTarget, collectDrop)
 )(Flavor)

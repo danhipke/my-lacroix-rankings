@@ -8,5 +8,6 @@ router.post('/api/users', db.createUser)
 router.get('/api/rankings/:userId', db.getRankings)
 router.post('/api/rankings', db.createRankings)
 router.put('/api/rankings', db.updateRankings)
+router.get('/api/flavors', db.getFlavors)
 
 module.exports = router

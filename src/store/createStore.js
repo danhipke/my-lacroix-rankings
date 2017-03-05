@@ -3,13 +3,14 @@ import thunk from 'redux-thunk'
 import { browserHistory } from 'react-router'
 import makeRootReducer from './reducers'
 import { updateLocation } from './location'
-import rankingsService, { getRankingData } from '../services/rankingsService'
+import rankingsService from '../services/rankingsService'
+import userService from '../services/userService'
 
 export default (initialState = {}) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middleware = [thunk, rankingsService]
+  const middleware = [thunk, rankingsService, userService]
 
   // ======================================================
   // Store Enhancers
