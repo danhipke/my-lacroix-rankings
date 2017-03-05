@@ -9,6 +9,7 @@ import { GET_RANKING_DATA_FAILURE,
 // Constants
 // ------------------------------------
 export const RANKINGS_REORDER_ITEM = 'RANKINGS_REORDER_ITEM'
+export const SET_USER_ID = 'SET_USER_ID'
 
 // ------------------------------------
 // Actions
@@ -20,8 +21,16 @@ export function rankingsReorderItems (value) {
   }
 }
 
+export function setUserId (value) {
+  return {
+    type: SET_USER_ID,
+    payload: value
+  }
+}
+
 export const actions = {
-  rankingsReorderItems
+  rankingsReorderItems,
+  setUserId
 }
 
 // ------------------------------------
@@ -85,6 +94,11 @@ const ACTION_HANDLERS = {
   [SUBMIT_RANKING_DATA_SUCCESS]: (state, action) => {
     return Object.assign({}, state, {
       hasRankedBefore: true
+    })
+  },
+  [SET_USER_ID]: (state, action) => {
+    return Object.assign({}, state, {
+      userId: action.payload
     })
   }
 }

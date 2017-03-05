@@ -7,7 +7,7 @@ const connectionString = 'postgres://localhost:5432/my_lacroix_rankings_app'
 const db = pgp(connectionString)
 
 const getUser = (req, res, next) => {
-  const userId = parseInt(req.params.id)
+  const userId = req.params.id
   db.one('SELECT * FROM users WHERE id = $1', userId)
     .then((data) => {
       res.status(200)
@@ -22,8 +22,24 @@ const getUser = (req, res, next) => {
     )
 }
 
-const insertRankingsCs = new pgp.helpers.ColumnSet(['user_id', 'flavor_id', 'rank'], { table: 'rankings' })
-const insertRankings = (req, res, next) => {
+const createUser = (req, res, next) => {
+  const userId = req.body.id
+  db.none('INSERT INTO users(id) values($1)', userId)
+    .then((data) => {
+      res.status(201)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Created user'
+        })
+    })
+    .catch((err) =>
+      next(err)
+    )
+}
+
+const createRankingsCs = new pgp.helpers.ColumnSet(['user_id', 'flavor_id', 'rank'], { table: 'rankings' })
+const createRankings = (req, res, next) => {
   const userId = req.body.userId
   let rankings = req.body.rankings.map((ranking) => (
     {
@@ -32,11 +48,11 @@ const insertRankings = (req, res, next) => {
       rank: ranking.rank
     })
   )
-  let query = pgp.helpers.insert(rankings, insertRankingsCs)
+  let query = pgp.helpers.insert(rankings, createRankingsCs)
 
   db.none(query)
     .then((data) => {
-      res.status(200)
+      res.status(201)
         .json({
           status: 'success',
           message: 'Successfully inserted all rankings'
@@ -74,7 +90,7 @@ const updateRankings = (req, res, next) => {
 }
 
 const getRankings = (req, res, next) => {
-  const userId = parseInt(req.params.userId)
+  const userId = req.params.userId
   db.many('SELECT * FROM rankings WHERE user_id = $1', userId)
     .then((data) => {
       res.status(200)
@@ -91,7 +107,8 @@ const getRankings = (req, res, next) => {
 
 module.exports = {
   getUser: getUser,
-  insertRankings: insertRankings,
+  createRankings: createRankings,
   updateRankings: updateRankings,
-  getRankings: getRankings
+  getRankings: getRankings,
+  createUser: createUser
 }

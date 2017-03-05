@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
-const db = require('../queries')
+const db = require('./queries')
 
 router.get('/api/users/:id', db.getUser)
+router.post('/api/users', db.createUser)
 router.get('/api/rankings/:userId', db.getRankings)
-router.post('/api/rankings', db.insertRankings)
+router.post('/api/rankings', db.createRankings)
 router.put('/api/rankings', db.updateRankings)
 
 module.exports = router

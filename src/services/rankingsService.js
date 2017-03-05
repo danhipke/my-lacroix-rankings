@@ -36,6 +36,22 @@ const rankingsService = store => next => action => {
         })
       )
       if (!hasRankedBefore) {
+        request.post(`/api/users`)
+        .set('Content-Type', 'application/json')
+        .send({ id: userId })
+        .end((err, res) => {
+          if (err) {
+            return next({
+              type: SUBMIT_RANKING_DATA_FAILURE,
+              payload: err
+            })
+          }
+          const data = JSON.parse(res.text)
+          next({
+            type: SUBMIT_RANKING_DATA_SUCCESS,
+            payload: data
+          })
+        })
         request.post('/api/rankings')
         .set('Content-Type', 'application/json')
         .send({ userId: userId, rankings: rankingsPostData })

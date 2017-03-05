@@ -15,18 +15,14 @@ db.tx(t => {
     t.none('DROP TABLE IF EXISTS users;'),
     t.none('DROP TABLE IF EXISTS rankings;'),
     // Create users table
-    t.none('CREATE TABLE users(id SERIAL NOT NULL, ' +
-    'name TEXT NOT NULL, ' +
+    t.none('CREATE TABLE users(id TEXT NOT NULL, ' +
     'primary key (id));'),
     // Create rankings table
-    t.none('CREATE TABLE rankings(user_id INTEGER NOT NULL, ' +
+    t.none('CREATE TABLE rankings(user_id TEXT NOT NULL, ' +
     'flavor_id TEXT NOT NULL, ' +
     'rank INTEGER NOT NULL, ' +
     'primary key (user_id,flavor_id));')
   ]
-  for (var i = 1; i <= 10; i++) {
-    queries.push(t.none('INSERT INTO users(name) VALUES($1)', 'name-' + i))
-  }
   return t.batch(queries)
 })
 .then(data => {

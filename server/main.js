@@ -7,7 +7,7 @@ const webpackConfig = require('../config/webpack.config')
 const project = require('../config/project.config')
 const compress = require('compression')
 
-const index = require('./routes/index')
+const routes = require('./routes')
 
 const app = express()
 
@@ -45,7 +45,7 @@ if (project.env === 'development') {
   app.use(bodyParser.urlencoded({ extended: true }))
 
   // Make the app serve our serverside /api routes
-  app.use('/', index)
+  app.use('/', routes)
 
   // This rewrites all routes requests to the root /index.html file
   // (ignoring file requests). If you want to implement universal
