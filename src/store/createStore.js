@@ -5,12 +5,13 @@ import makeRootReducer from './reducers'
 import { updateLocation } from './location'
 import rankingsService from '../services/rankingsService'
 import userService from '../services/userService'
+import resultsService from '../services/resultsService'
 
 export default (initialState = {}) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middleware = [thunk, rankingsService, userService]
+  const middleware = [thunk, rankingsService, userService, resultsService]
 
   // ======================================================
   // Store Enhancers

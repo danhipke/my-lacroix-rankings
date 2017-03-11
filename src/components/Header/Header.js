@@ -1,5 +1,5 @@
 import React from 'react'
-import { IndexLink } from 'react-router'
+import { IndexLink, Link } from 'react-router'
 import './Header.scss'
 
 export const Header = () => (
@@ -8,6 +8,10 @@ export const Header = () => (
     <IndexLink to='/' activeClassName='route--active'>
       Home
     </IndexLink>
+    {' · '}
+    <Link to='/results' activeClassName='route--active'>
+      Results
+    </Link>
   </div>
 )
 

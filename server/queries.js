@@ -140,11 +140,31 @@ const getFlavors = (req, res, next) => {
     )
 }
 
+const getResults = (req, res, next) => {
+  db.many('SELECT f.id, f.name, f.image_src, sum(r.rank) as total ' +
+  'FROM flavors f ' +
+  'LEFT JOIN rankings r ' +
+  'ON r.flavor_id = f.id ' +
+  'GROUP BY f.id')
+    .then((data) => {
+      res.status(200)
+        .json({
+          status: 'success',
+          results: data,
+          message: 'Retrieved all results'
+        })
+    })
+    .catch(err =>
+      next(err)
+    )
+}
+
 module.exports = {
   getUser: getUser,
   createRankings: createRankings,
   updateRankings: updateRankings,
   getRankings: getRankings,
   createUser: createUser,
-  getFlavors: getFlavors
+  getFlavors: getFlavors,
+  getResults: getResults
 }
