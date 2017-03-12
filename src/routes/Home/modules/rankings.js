@@ -50,7 +50,9 @@ const ACTION_HANDLERS = {
     })
 
     newFlavors = newFlavors.map((item, i) => {
-      return Object.assign({}, item, { rank: i + 1 })
+      return Object.assign({}, item, {
+        oldRank: item.rank,
+        rank: i + 1 })
     })
 
     return Object.assign({}, state, {
