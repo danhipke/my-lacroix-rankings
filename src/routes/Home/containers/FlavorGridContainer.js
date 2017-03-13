@@ -50,7 +50,7 @@ class FlavorGridContainer extends React.Component {
     setUserId: PropTypes.func.isRequired,
     createUser: PropTypes.func.isRequired
   }
-  // TODO: FIGURE OUT HOW TO BETTER TRACK ORDER USING ID, NOT INDEX
+
   constructor (props) {
     super(props)
 
@@ -66,6 +66,7 @@ class FlavorGridContainer extends React.Component {
       mouseXY: [0, 0],
       mouseCircleDelta: [0, 0], // difference between mouse and circle pos for x + y coords, for dragging
       lastPress: null, // key of the last pressed component
+      moved: null,
       isPressed: false
     }
 
@@ -91,6 +92,7 @@ class FlavorGridContainer extends React.Component {
     this.handleMouseMove(e.touches[0])
   }
 
+  // TODO: fix janky moved + lastPress interaction. Basically, refactor this component
   handleMouseMove ({ pageX, pageY }) {
     const { lastPress, isPressed, mouseCircleDelta: [dx, dy] } = this.state
     if (isPressed) {
@@ -100,6 +102,7 @@ class FlavorGridContainer extends React.Component {
       const index = row * 7 + col
       this.setState({ mouseXY })
       if (lastPress === index) return
+      this.setState({ moved: lastPress })
       this.moveFlavor(lastPress, index)
       this.setState({ lastPress: index })
     }
@@ -141,7 +144,7 @@ class FlavorGridContainer extends React.Component {
 
   // TODO: Move button rendering and Flavor creation into separate component
   render () {
-    const { lastPress, isPressed, mouseXY } = this.state
+    const { lastPress, isPressed, mouseXY, moved } = this.state
     return (
       <div>
         <div style={{ width: '1000px', height: '500px' }}>
@@ -150,7 +153,7 @@ class FlavorGridContainer extends React.Component {
             let x
             let y
             const visualPosition = i
-            if (i === lastPress && isPressed) {
+            if (i === lastPress && i !== moved && isPressed) {
               [x, y] = mouseXY
               style = {
                 translateX: x,
