@@ -30,7 +30,7 @@ function clamp (n, min, max) {
   return Math.max(Math.min(n, max), min)
 }
 
-const [count, width, height] = [20, 130, 130]
+const [count, width, height] = [20, 150, 150]
 
 // indexed by visual position
 const layout = range(count).map(n => {
@@ -50,18 +50,18 @@ class FlavorGridContainer extends React.Component {
     setUserId: PropTypes.func.isRequired,
     createUser: PropTypes.func.isRequired
   }
-
+  // TODO: FIGURE OUT HOW TO BETTER TRACK ORDER USING ID, NOT INDEX
   constructor (props) {
     super(props)
 
     this.moveFlavor = this.moveFlavor.bind(this)
     this.submitFlavorRankings = this.submitFlavorRankings.bind(this)
 
+    this.handleTouchStart = this.handleTouchStart.bind(this)
     this.handleTouchMove = this.handleTouchMove.bind(this)
-    this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseUp = this.handleMouseUp.bind(this)
+    this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
-
     this.state = {
       mouseXY: [0, 0],
       mouseCircleDelta: [0, 0], // difference between mouse and circle pos for x + y coords, for dragging
@@ -98,22 +98,24 @@ class FlavorGridContainer extends React.Component {
       const col = clamp(Math.floor(mouseXY[0] / width), 0, 6)
       const row = clamp(Math.floor(mouseXY[1] / height), 0, Math.floor(count / 7))
       const index = row * 7 + col
-      this.moveFlavor(this.props.flavors.indexOf(lastPress), index)
-      this.state = { mouseXY }
+      this.setState({ mouseXY })
+      if (lastPress === index) return
+      this.moveFlavor(lastPress, index)
+      this.setState({ lastPress: index })
     }
   }
 
   handleMouseDown (key, [pressX, pressY], { pageX, pageY }) {
-    this.state = {
+    this.setState({
       lastPress: key,
       isPressed: true,
       mouseCircleDelta: [pageX - pressX, pageY - pressY],
       mouseXY: [pressX, pressY]
-    }
+    })
   }
 
   handleMouseUp () {
-    this.state = { isPressed: false, mouseCircleDelta: [0, 0] }
+    this.setState({ isPressed: false, mouseCircleDelta: [0, 0] })
   }
 
   moveFlavor (startIndex, endIndex) {
@@ -142,7 +144,7 @@ class FlavorGridContainer extends React.Component {
     const { lastPress, isPressed, mouseXY } = this.state
     return (
       <div>
-        <div>
+        <div style={{ width: '1000px', height: '500px' }}>
           {this.props.flavors.map((flavor, i) => {
             let style
             let x
@@ -166,12 +168,13 @@ class FlavorGridContainer extends React.Component {
               }
             }
             return (
-              <Motion key={i} style={style} >
+              <Motion key={flavor.id} style={style} >
                 {({ translateX, translateY, scale, boxShadow }) =>
                   <Flavor
                     handleMouseDown={this.handleMouseDown}
                     handleTouchStart={this.handleTouchStart}
-                    key={flavor.id}
+                    x={x}
+                    y={y}
                     index={i}
                     id={flavor.id}
                     imageSrc={flavor.imageSrc}

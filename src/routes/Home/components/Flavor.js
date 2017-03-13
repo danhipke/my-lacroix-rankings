@@ -12,6 +12,7 @@ export const Flavor = (props) => {
       <img
         src={imageSrc}
         alt={flavor}
+        draggable='false'
         style={{ width: '100%' }}
         className='flavor-image' />
       <span className='flavor-rank'>{index + 1}</span>
@@ -21,11 +22,15 @@ export const Flavor = (props) => {
 
 Flavor.propTypes = {
   index: PropTypes.number.isRequired,
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
   imageSrc: PropTypes.string.isRequired,
   id: PropTypes.any.isRequired,
   flavor: PropTypes.string.isRequired,
   moveFlavor: PropTypes.func.isRequired,
-  style: PropTypes.object.isRequired
+  style: PropTypes.object.isRequired,
+  handleMouseDown: PropTypes.func.isRequired,
+  handleTouchStart: PropTypes.func.isRequired
 }
 
 export default Flavor
