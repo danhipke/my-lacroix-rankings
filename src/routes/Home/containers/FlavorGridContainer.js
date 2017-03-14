@@ -101,7 +101,7 @@ class FlavorGridContainer extends React.Component {
       const row = clamp(Math.floor(mouseXY[1] / height), 0, Math.floor(count / 7))
       const index = row * 7 + col
       this.setState({ mouseXY })
-      if (lastPress === index) return
+      if (lastPress === index || index >= layout.length) return
       this.setState({ moved: lastPress })
       this.moveFlavor(lastPress, index)
       this.setState({ lastPress: index })
