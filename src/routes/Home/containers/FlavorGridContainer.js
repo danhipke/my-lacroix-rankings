@@ -7,7 +7,6 @@ import { createUser } from '../../../services/userService'
 import Flavor from '../components/Flavor'
 import Fingerprint2 from 'fingerprintjs2'
 import { Motion, spring } from 'react-motion'
-import range from 'lodash.range'
 
 const mapDispatchToProps = {
   reorderFlavor,
@@ -30,14 +29,47 @@ function clamp (n, min, max) {
   return Math.max(Math.min(n, max), min)
 }
 
-const [count, width, height] = [20, 150, 150]
+const [width, height] = [120, 120]
 
 // indexed by visual position
-const layout = range(count).map(n => {
-  const row = Math.floor(n / 7)
-  const col = n % 7
-  return [width * col, height * row]
-})
+const layout = [
+  [3 * width, 0 * height],
+  [2 * width, 1 * height],
+  [3 * width, 1 * height],
+  [4 * width, 1 * height],
+  [1.5 * width, 2 * height],
+  [2.5 * width, 2 * height],
+  [3.5 * width, 2 * height],
+  [4.5 * width, 2 * height],
+  [1 * width, 3 * height],
+  [2 * width, 3 * height],
+  [3 * width, 3 * height],
+  [4 * width, 3 * height],
+  [5 * width, 3 * height],
+  [0 * width, 4 * height],
+  [1 * width, 4 * height],
+  [2 * width, 4 * height],
+  [3 * width, 4 * height],
+  [4 * width, 4 * height],
+  [5 * width, 4 * height],
+  [6 * width, 4 * height]
+]
+
+const itemsBeforeRow = [
+  0,
+  1,
+  4,
+  8,
+  13
+]
+
+const itemsAtRow = [
+  1,
+  3,
+  4,
+  5,
+  7
+]
 
 class FlavorGridContainer extends React.Component {
   static propTypes = {
@@ -97,9 +129,14 @@ class FlavorGridContainer extends React.Component {
     const { lastPress, isPressed, mouseCircleDelta: [dx, dy] } = this.state
     if (isPressed) {
       const mouseXY = [pageX - dx, pageY - dy]
-      const col = clamp(Math.floor(mouseXY[0] / width), 0, 6)
-      const row = clamp(Math.floor(mouseXY[1] / height), 0, Math.floor(count / 7))
-      const index = row * 7 + col
+      const row = clamp(Math.floor(mouseXY[1] / height), 0, 4)
+      // TODO: Make this work better
+      const minCol = Math.floor((itemsAtRow[4] - itemsAtRow[row]) / 2)
+      const maxCol = itemsAtRow[4] - 1 - (1 - itemsAtRow[row] % 2) - minCol
+      const col = clamp(Math.floor(mouseXY[0] / width), minCol, maxCol) - minCol
+      console.log(row)
+      console.log(col)
+      const index = itemsBeforeRow[row] + col
       this.setState({ mouseXY })
       if (lastPress === index || index >= layout.length) return
       this.setState({ moved: lastPress })
@@ -147,7 +184,7 @@ class FlavorGridContainer extends React.Component {
     const { lastPress, isPressed, mouseXY, moved } = this.state
     return (
       <div>
-        <div style={{ width: '1000px', height: '500px' }}>
+        <div style={{ width: '820px', height: '600px', margin: 'auto' }}>
           {this.props.flavors.map((flavor, i) => {
             let style
             let x
