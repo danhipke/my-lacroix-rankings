@@ -7,9 +7,7 @@ class Flavor extends React.Component {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     imageSrc: PropTypes.string.isRequired,
-    id: PropTypes.any.isRequired,
     flavor: PropTypes.string.isRequired,
-    moveFlavor: PropTypes.func.isRequired,
     style: PropTypes.object.isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     handleTouchStart: PropTypes.func.isRequired
@@ -41,7 +39,6 @@ class Flavor extends React.Component {
           src={imageSrc}
           alt={flavor}
           draggable='false'
-          style={{ width: '100%' }}
           className='flavor-image' />
         <span className='flavor-rank'>{index + 1}</span>
       </div>
