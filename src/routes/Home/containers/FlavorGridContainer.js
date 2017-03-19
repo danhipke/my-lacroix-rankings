@@ -134,8 +134,6 @@ class FlavorGridContainer extends React.Component {
       const minCol = Math.floor((itemsAtRow[4] - itemsAtRow[row]) / 2)
       const maxCol = itemsAtRow[4] - 1 - (1 - itemsAtRow[row] % 2) - minCol
       const col = clamp(Math.floor(mouseXY[0] / width), minCol, maxCol) - minCol
-      console.log(row)
-      console.log(col)
       const index = itemsBeforeRow[row] + col
       this.setState({ mouseXY })
       if (lastPress === index || index >= layout.length) return
@@ -146,6 +144,7 @@ class FlavorGridContainer extends React.Component {
   }
 
   handleMouseDown (key, [pressX, pressY], { pageX, pageY }) {
+    console.log(pageX)
     this.setState({
       lastPress: key,
       isPressed: true,
