@@ -137,9 +137,7 @@ class FlavorGrid extends React.Component {
       <div>
         <div style={{ width: '820px', height: '600px', margin: 'auto' }}>
           {this.props.flavors.map((flavor, i) => {
-            let style
-            let x
-            let y
+            let style, x, y
             const visualPosition = i
             if (i === lastPress && i !== moved && isPressed) {
               [x, y] = mouseXY
