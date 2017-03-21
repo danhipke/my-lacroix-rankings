@@ -185,7 +185,7 @@ db.tx(t => {
 })
 .then(data => {
   debug('Successfully bootstrapped database!')
-  pgp.end(); // shut down the connection pool, so the process exits normally
+  pgp.end(); // shutting down the connection pool, so the process exits normally
 })
 .catch(error => {
   debug(error)
