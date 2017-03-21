@@ -23,7 +23,8 @@ const ACTION_HANDLERS = {
         id: result.id,
         name: result.name,
         total: result.total,
-        imageSrc: result.image_src
+        imageSrc: result.image_src,
+        color: result.color
       }
     )).sort((a, b) =>
       a.total - b.total

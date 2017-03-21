@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import Result from '../components/Result'
 import { connect } from 'react-redux'
-import {XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, HorizontalBarSeries } from 'react-vis'
+import { XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, HorizontalBarSeries } from 'react-vis'
 import { getResults } from '../../../services/resultsService'
 
 const mapDispatchToProps = {
@@ -29,23 +29,23 @@ class ResultsContainer extends React.Component {
       return {
         y: rankingTotal.name,
         x: parseInt(rankingTotal.total),
-        height: 10
+        color: rankingTotal.color
       }
     })
     return (
       <div>
         <XYPlot
+          margin={{ left: 120 }}
           width={1000}
           height={600}
-          yType='ordinal'
-          yRange={[-10, 600 - 40]}>
-          <HorizontalGridLines />
+          colorType='literal'
+          yType='ordinal'>
           <VerticalGridLines />
-          <HorizontalBarSeries
-            data={visualizationData} />
+          <HorizontalGridLines />
           <YAxis />
           <XAxis />
-
+          <HorizontalBarSeries
+            data={visualizationData} />
         </XYPlot>
         {this.props.rankingTotals.map((rankingTotal, i) => {
           return (

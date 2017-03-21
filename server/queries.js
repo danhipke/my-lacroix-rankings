@@ -141,7 +141,7 @@ const getFlavors = (req, res, next) => {
 }
 
 const getResults = (req, res, next) => {
-  db.many('SELECT f.id, f.name, f.image_src, sum(r.rank) as total ' +
+  db.many('SELECT f.id, f.name, f.image_src, f.color, sum(r.rank) as total ' +
   'FROM flavors f ' +
   'LEFT JOIN rankings r ' +
   'ON r.flavor_id = f.id ' +
