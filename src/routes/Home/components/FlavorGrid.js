@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import Flavor from './Flavor'
+import './FlavorGrid.scss'
 import { Motion, spring } from 'react-motion'
 
 function clamp (n, min, max) {
@@ -135,7 +136,13 @@ class FlavorGrid extends React.Component {
     const { lastPress, isPressed, mouseXY, moved } = this.state
     return (
       <div>
-        <div style={{ width: '820px', height: '600px', margin: 'auto' }}>
+        <div className='flavor-grid'>
+          <div className='pyramid'>
+            <div id='pyramid-level-4' />
+            <div id='pyramid-level-3' />
+            <div id='pyramid-level-2' />
+            <div id='pyramid-level-1' />
+          </div>
           {this.props.flavors.map((flavor, i) => {
             let style, x, y
             const visualPosition = i
@@ -143,7 +150,7 @@ class FlavorGrid extends React.Component {
               [x, y] = mouseXY
               style = {
                 translateX: x,
-                translateY: y,
+                translateY: y + 130,
                 scale: spring(1.2, springSetting1),
                 boxShadow: spring((x - (3 * width - 50) / 2) / 15, springSetting1)
               }
@@ -151,7 +158,7 @@ class FlavorGrid extends React.Component {
               [x, y] = layout[visualPosition]
               style = {
                 translateX: spring(x, springSetting2),
-                translateY: spring(y, springSetting2),
+                translateY: spring(y + 130, springSetting2),
                 scale: spring(1, springSetting1),
                 boxShadow: spring((x - (3 * width - 50) / 2) / 15, springSetting1)
               }

@@ -40,8 +40,6 @@ class ResultsContainer extends React.Component {
           height={600}
           colorType='literal'
           yType='ordinal'>
-          <VerticalGridLines />
-          <HorizontalGridLines />
           <YAxis />
           <XAxis />
           <HorizontalBarSeries
