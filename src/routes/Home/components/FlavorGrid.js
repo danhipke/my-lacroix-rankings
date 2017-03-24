@@ -59,7 +59,11 @@ class FlavorGrid extends React.Component {
   static propTypes = {
     moveFlavor: PropTypes.func.isRequired,
     submitFlavorRankings: PropTypes.func.isRequired,
-    flavors: PropTypes.array.isRequired
+    flavors: PropTypes.array.isRequired,
+    isSubmitting: PropTypes.bool.isRequired,
+    hasRankedBefore: PropTypes.bool.isRequired,
+    submitSucceeded: PropTypes.bool.isRequired,
+    submitFailed: PropTypes.bool.isRequired
   }
 
   constructor (props) {
@@ -136,6 +140,25 @@ class FlavorGrid extends React.Component {
   }
 
   render () {
+    const { isSubmitting, hasRankedBefore, submitSucceeded, submitFailed } = this.props
+    let buttonText, buttonColor
+    if (isSubmitting) {
+      buttonText = 'Submitting vote...'
+      buttonColor = 'grey'
+    } else if (submitSucceeded) {
+      buttonText = 'Vote saved!'
+      buttonColor = 'green'
+    } else if (submitFailed) {
+      buttonText = 'Vote failed :('
+      buttonColor = 'red'
+    } else if (hasRankedBefore) {
+      buttonText = 'Update your Vote!'
+      buttonColor = 'green'
+    } else {
+      buttonText = 'Vote and see the Results!'
+      buttonColor = 'white'
+    }
+
     const { lastPress, isPressed, mouseXY, moved } = this.state
     return (
       <div>
@@ -191,8 +214,10 @@ class FlavorGrid extends React.Component {
           })}
         </div>
         <div>
-          <button onClick={this.props.submitFlavorRankings} className='submit-button'>
-            Vote and see the Results!
+          <button onClick={this.props.submitFlavorRankings}
+            className='submit-button'
+            style={{ backgroundColor: buttonColor }}>
+            {buttonText}
           </button>
         </div>
       </div>

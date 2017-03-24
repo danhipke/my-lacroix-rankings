@@ -1,6 +1,7 @@
 import { GET_RANKINGS_ERROR,
         GET_RANKINGS_SUCCESS,
         GET_RANKINGS_DOESNT_EXIST,
+        SUBMIT_RANKINGS,
         SUBMIT_RANKINGS_ERROR,
         SUBMIT_RANKINGS_SUCCESS } from '../../../services/rankingsService'
 
@@ -85,13 +86,22 @@ const ACTION_HANDLERS = {
       hasRankedBefore: false
     })
   },
+  [SUBMIT_RANKINGS]: (state, action) => {
+    return Object.assign({}, state, {
+      isSubmitting: true
+    })
+  },
   [SUBMIT_RANKINGS_ERROR]: (state, action) => {
-    // TODO: Handle this error
-    return state
+    return Object.assign({}, state, {
+      submitFailed: true,
+      isSubmitting: false
+    })
   },
   [SUBMIT_RANKINGS_SUCCESS]: (state, action) => {
     return Object.assign({}, state, {
-      hasRankedBefore: true
+      hasRankedBefore: true,
+      submitSucceeded: true,
+      isSubmitting: false
     })
   }
 }
@@ -101,6 +111,9 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   hasRankedBefore: false,
+  isSubmitting: false,
+  submitSucceeded: false,
+  submitFailed: false,
   // For now, leave default rankings here. May be worth loading from DB at some
   // point, but this will minimize DB queries
   flavors: [

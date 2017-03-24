@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import Result from '../components/Result'
 import { connect } from 'react-redux'
-import { XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, HorizontalBarSeries } from 'react-vis'
+import { XYPlot, XAxis, YAxis, HorizontalBarSeries } from 'react-vis'
 import { getResults } from '../../../services/resultsService'
 
 const mapDispatchToProps = {

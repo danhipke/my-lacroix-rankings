@@ -18,7 +18,10 @@ const mapDispatchToProps = {
 const mapStateToProps = (state) => ({
   flavors : state.rankings.flavors,
   userId: state.user.userId,
-  hasRankedBefore: state.rankings.hasRankedBefore
+  hasRankedBefore: state.rankings.hasRankedBefore,
+  isSubmitting: state.rankings.isSubmitting,
+  submitSucceeded: state.rankings.submitSucceeded,
+  submitFailed: state.rankings.submitFailed
 })
 
 class FlavorGridContainer extends React.Component {
@@ -30,7 +33,10 @@ class FlavorGridContainer extends React.Component {
     submitRankings: PropTypes.func.isRequired,
     getRankings: PropTypes.func.isRequired,
     setUserId: PropTypes.func.isRequired,
-    createUser: PropTypes.func.isRequired
+    createUser: PropTypes.func.isRequired,
+    isSubmitting: PropTypes.bool.isRequired,
+    submitSucceeded: PropTypes.bool.isRequired,
+    submitFailed: PropTypes.bool.isRequired
   }
 
   constructor (props) {
@@ -66,13 +72,16 @@ class FlavorGridContainer extends React.Component {
     this.props.submitRankings(submitData)
   }
 
-  // TODO: Move button rendering and Flavor creation into separate component
   render () {
     return (
       <FlavorGrid
         moveFlavor={this.moveFlavor}
         submitFlavorRankings={this.submitFlavorRankings}
         flavors={this.props.flavors}
+        isSubmitting={this.props.isSubmitting}
+        hasRankedBefore={this.props.hasRankedBefore}
+        submitSucceeded={this.props.submitSucceeded}
+        submitFailed={this.props.submitFailed}
       />
     )
   }
