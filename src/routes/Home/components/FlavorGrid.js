@@ -192,7 +192,7 @@ class FlavorGrid extends React.Component {
         </div>
         <div>
           <button onClick={this.props.submitFlavorRankings} className='submit-button'>
-            Submit Your Rankings
+            Vote and see the Results!
           </button>
         </div>
       </div>
