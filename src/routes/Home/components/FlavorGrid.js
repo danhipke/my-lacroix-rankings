@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import Flavor from './Flavor'
+import ColorPyramid from './ColorPyramid'
 import './FlavorGrid.scss'
 import { Motion, spring } from 'react-motion'
 
@@ -15,41 +16,43 @@ const [width, height] = [120, 120]
 // indexed by visual position
 const layout = [
   [3 * width, 0 * height],
-  [2 * width, 1 * height],
-  [3 * width, 1 * height],
-  [4 * width, 1 * height],
-  [1.5 * width, 2 * height],
-  [2.5 * width, 2 * height],
-  [3.5 * width, 2 * height],
-  [4.5 * width, 2 * height],
-  [1 * width, 3 * height],
-  [2 * width, 3 * height],
-  [3 * width, 3 * height],
-  [4 * width, 3 * height],
-  [5 * width, 3 * height],
-  [0 * width, 4 * height],
+  [2.5 * width, 1 * height],
+  [3.5 * width, 1 * height],
+  [2 * width, 2 * height],
+  [3 * width, 2 * height],
+  [4 * width, 2 * height],
+  [1.5 * width, 3 * height],
+  [2.5 * width, 3 * height],
+  [3.5 * width, 3 * height],
+  [4.5 * width, 3 * height],
   [1 * width, 4 * height],
   [2 * width, 4 * height],
   [3 * width, 4 * height],
   [4 * width, 4 * height],
   [5 * width, 4 * height],
-  [6 * width, 4 * height]
+  [0.5 * width, 5 * height],
+  [1.5 * width, 5 * height],
+  [2.5 * width, 5 * height],
+  [3.5 * width, 5 * height],
+  [4.5 * width, 5 * height]
 ]
 
 const itemsBeforeRow = [
   0,
   1,
-  4,
-  8,
-  13
+  3,
+  6,
+  10,
+  15
 ]
 
 const itemsAtRow = [
   1,
+  2,
   3,
   4,
   5,
-  7
+  6
 ]
 
 class FlavorGrid extends React.Component {
@@ -71,9 +74,9 @@ class FlavorGrid extends React.Component {
     this.state = {
       mouseXY: [0, 0],
       mouseCircleDelta: [0, 0], // difference between mouse and circle pos for x + y coords, for dragging
-      lastPress: null, // key of the last pressed component
-      moved: null,
-      isPressed: false
+      lastPress: null, // index of the last pressed flavor
+      moved: null, // new index of last displaced flavor
+      isPressed: false // whether or not mouse is held down
     }
   }
 
@@ -105,10 +108,10 @@ class FlavorGrid extends React.Component {
     const { lastPress, isPressed, mouseCircleDelta: [dx, dy] } = this.state
     if (isPressed) {
       const mouseXY = [pageX - dx, pageY - dy]
-      const row = clamp(Math.floor(mouseXY[1] / height), 0, 4)
+      const row = clamp(Math.floor(mouseXY[1] / height), 0, 5)
       // TODO: Make this work better
-      const minCol = Math.floor((itemsAtRow[4] - itemsAtRow[row]) / 2)
-      const maxCol = itemsAtRow[4] - 1 - (1 - itemsAtRow[row] % 2) - minCol
+      const minCol = Math.floor((itemsAtRow[5] - itemsAtRow[row]) / 2)
+      const maxCol = itemsAtRow[5] - 1 - (itemsAtRow[row] % 2) - minCol
       const col = clamp(Math.floor(mouseXY[0] / width), minCol, maxCol) - minCol
       const index = itemsBeforeRow[row] + col
       this.setState({ mouseXY })
@@ -136,13 +139,15 @@ class FlavorGrid extends React.Component {
     const { lastPress, isPressed, mouseXY, moved } = this.state
     return (
       <div>
+        <ColorPyramid
+          colors={['#D83060',
+            '#F09060',
+            '#D8C030',
+            '#90C030',
+            '#246F91',
+            '#304848',
+            '#000000']} />
         <div className='flavor-grid'>
-          <div className='pyramid'>
-            <div id='pyramid-level-4' />
-            <div id='pyramid-level-3' />
-            <div id='pyramid-level-2' />
-            <div id='pyramid-level-1' />
-          </div>
           {this.props.flavors.map((flavor, i) => {
             let style, x, y
             const visualPosition = i
@@ -150,7 +155,7 @@ class FlavorGrid extends React.Component {
               [x, y] = mouseXY
               style = {
                 translateX: x,
-                translateY: y + 130,
+                translateY: y,
                 scale: spring(1.2, springSetting1),
                 boxShadow: spring((x - (3 * width - 50) / 2) / 15, springSetting1)
               }
@@ -158,7 +163,7 @@ class FlavorGrid extends React.Component {
               [x, y] = layout[visualPosition]
               style = {
                 translateX: spring(x, springSetting2),
-                translateY: spring(y + 130, springSetting2),
+                translateY: spring(y, springSetting2),
                 scale: spring(1, springSetting1),
                 boxShadow: spring((x - (3 * width - 50) / 2) / 15, springSetting1)
               }
@@ -186,8 +191,8 @@ class FlavorGrid extends React.Component {
           })}
         </div>
         <div>
-          <button onClick={this.props.submitFlavorRankings}>
-            Submit Rankings
+          <button onClick={this.props.submitFlavorRankings} className='submit-button'>
+            Submit Your Rankings
           </button>
         </div>
       </div>
