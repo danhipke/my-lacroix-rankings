@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import Result from '../components/Result'
 import { connect } from 'react-redux'
 import { XYPlot, XAxis, YAxis, HorizontalBarSeries } from 'react-vis'
 import { getResults } from '../../../services/resultsService'
@@ -33,27 +32,17 @@ class ResultsContainer extends React.Component {
       }
     })
     return (
-      <div>
-        <XYPlot
-          margin={{ left: 120 }}
-          width={1000}
-          height={600}
-          colorType='literal'
-          yType='ordinal'>
-          <YAxis />
-          <XAxis />
-          <HorizontalBarSeries
-            data={visualizationData} />
-        </XYPlot>
-        {this.props.rankingTotals.map((rankingTotal, i) => {
-          return (
-            <Result
-              key={rankingTotal.id}
-              total={rankingTotal.total}
-              flavor={rankingTotal.name} />
-          )
-        })}
-      </div>
+      <XYPlot
+        margin={{ left: 120 }}
+        width={1000}
+        height={600}
+        colorType='literal'
+        yType='ordinal'>
+        <YAxis />
+        <XAxis />
+        <HorizontalBarSeries
+          data={visualizationData} />
+      </XYPlot>
     )
   }
 }

@@ -8,10 +8,7 @@ export const Header = () => (
     <IndexLink to='/' activeClassName='route--active'>
       Home
     </IndexLink>
-    <img
-      src='/images/illuminati.png'
-      draggable='false'
-      style={{ width: '140px', marginRight: '20px', marginLeft: '20px' }} />
+    {' · '}
     <Link to='/results' activeClassName='route--active'>
       Results
     </Link>

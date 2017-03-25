@@ -1,23 +1,22 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
 import { HomeView } from 'routes/Home/components/HomeView'
-import { render } from 'enzyme'
+import { shallow } from 'enzyme'
 
 describe('(View) Home', () => {
-  let _component
+  let _props, _spies, _wrapper
 
   beforeEach(() => {
-    _component = render(<HomeView />)
+    _spies = {}
+    _props = {
+      ...bindActionCreators({
+        reorderFlavor : (_spies.reorderFlavor = sinon.spy())
+      }, _spies.dispatch = sinon.spy())
+    }
+    _wrapper = shallow(<HomeView {..._props} />)
   })
 
-  it('Renders a welcome message', () => {
-    const welcome = _component.find('h4')
-    expect(welcome).to.exist
-    expect(welcome.text()).to.match(/Welcome!/)
-  })
-
-  it('Renders an awesome duck image', () => {
-    const duck = _component.find('img')
-    expect(duck).to.exist
-    expect(duck.attr('alt')).to.match(/This is a duck, because Redux!/)
+  it('Should render as a <div>.', () => {
+    expect(_wrapper.is('div')).to.equal(true)
   })
 })

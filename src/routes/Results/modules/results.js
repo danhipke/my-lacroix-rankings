@@ -44,12 +44,10 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  // For now, leave default rankings here. May be worth loading from DB at some
-  // point, but this will minimize DB queries
   rankingTotals: [ ]
 }
 
-export default function rankingsReducer (state = initialState, action) {
+export default function resultsReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state

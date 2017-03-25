@@ -1,17 +1,17 @@
 import HomeRoute from 'routes/Home'
 
 describe('(Route) Home', () => {
-  let _component
+  let _route
 
   beforeEach(() => {
-    _component = HomeRoute.component()
+    _route = HomeRoute({})
   })
 
   it('Should return a route configuration object', () => {
-    expect(typeof HomeRoute).to.equal('object')
+    expect(typeof _route).to.equal('object')
   })
 
-  it('Should define a route component', () => {
-    expect(_component.type).to.equal('div')
+  it('Should not have path defined (index route).', () => {
+    expect(_route.path).to.equal(undefined)
   })
 })

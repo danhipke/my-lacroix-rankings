@@ -9,14 +9,14 @@ export default (store) => ({
     require.ensure([], (require) => {
       /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const Results = require('./components/Results').default
+      const ResultsView = require('./components/ResultsView').default
       const resultsReducer = require('./modules/results').default
 
       /*  Add the reducers  */
       injectReducer(store, { key: 'results', reducer: resultsReducer })
 
       /*  Return getComponent   */
-      cb(null, Results)
+      cb(null, ResultsView)
 
     /* Webpack named bundle   */
     }, 'results')
