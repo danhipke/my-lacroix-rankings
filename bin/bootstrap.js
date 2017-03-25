@@ -155,7 +155,7 @@ let defaultFlavors = [
 
 db.tx(t => {
   let insertFlavorsQuery = pgp.helpers.insert(defaultFlavors, insertFlavorsCs)
-  
+
   let queries = [
     // Clear out preexisting tables
     t.none('DROP TABLE IF EXISTS users, rankings, flavors;'),
@@ -185,7 +185,7 @@ db.tx(t => {
 })
 .then(data => {
   debug('Successfully bootstrapped database!')
-  pgp.end(); // shutting down the connection pool, so the process exits normally
+  pgp.end() // shutting down the connection pool, so the process exits normally
 })
 .catch(error => {
   debug(error)
