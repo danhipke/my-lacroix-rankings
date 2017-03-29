@@ -1,7 +1,7 @@
 {
-  "name": "react-redux-starter-kit",
-  "version": "3.0.0-alpha.2",
-  "description": "Get started with React, Redux, and React-Router!",
+  "name": "my-lacroix-rankings",
+  "version": "0.1.0",
+  "description": "Rank your favorite LaCroix flavors!",
   "main": "index.js",
   "engines": {
     "node": ">=4.5.0",
