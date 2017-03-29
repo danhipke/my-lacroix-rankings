@@ -3357,10 +3357,6 @@ jodid25519@^1.0.0:
   dependencies:
     jsbn "~0.1.0"
 
-jquery@^2.1.3:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
-
 js-base64@^2.1.9:
   version "2.1.9"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.1.9.tgz#f0e80ae039a4bd654b5f281fc93f04a914a7fcce"
@@ -4989,9 +4985,9 @@ react-router@^3.0.0:
     loose-envify "^1.2.0"
     warning "^3.0.0"
 
-react-vis@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.0.1.tgz#c690d2b89f9618ec0ddb42a4cb15181da89d27a1"
+react-vis@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.1.1.tgz#bb3868e225f25976e16eb8e1f891802129f2e86e"
   dependencies:
     d3-array "^1.0.2"
     d3-collection "^1.0.2"
